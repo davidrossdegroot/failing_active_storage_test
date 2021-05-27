@@ -70,7 +70,7 @@ Rails.application.initialize!
 require ActiveStorage::Engine.root.join('db/migrate/20170806125915_create_active_storage_tables.rb').to_s
 
 ActiveRecord::Schema.define do
-  # CreateActiveStorageTables.new.change
+  CreateActiveStorageTables.new.change # can comment this out if you've already got the table
 
   create_table :users, force: true
 end
