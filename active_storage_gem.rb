@@ -3,7 +3,6 @@
 require 'bundler/inline'
 
 gemfile(true) do
-  # source 'https://nexus-gss.uscis.dhs.gov/nexus/repository/didit-gems-group/'
   source "https://rubygems.org"
 
   git_source(:github) { |repo| "https://github.com/#{repo}.git" }
@@ -68,7 +67,6 @@ module ActiveStorage
   end
 end
 
-# ENV["DATABASE_URL"] = "jdbc:postgresql://localhost:5432/didit_checkers_test"
 Rails.application.initialize!
 
 require ActiveStorage::Engine.root.join('db/migrate/20170806125915_create_active_storage_tables.rb').to_s
