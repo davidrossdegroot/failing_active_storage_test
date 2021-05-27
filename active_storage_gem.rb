@@ -49,15 +49,21 @@ end
 
 require 'active_storage/service/s3_service'
 
+# This is here because active storage s3 does not support
+# client side encryption
 module ActiveStorage
   class Service::S3Service < Service
-    def initialize(bucket:, upload: {}, **options)
+    def initialize(bucket:, upload: {}, public: false, **options)
       super()
       client = Aws::S3::Encryption::Client.new(**options)
       @client = Aws::S3::Resource.new(client: client)
       @bucket = @client.bucket(bucket)
 
+      @multipart_upload_threshold = upload.delete(:multipart_threshold) || 100.megabytes
+      @public = public
+
       @upload_options = upload
+      @upload_options[:acl] = "public-read" if public?
     end
   end
 end
