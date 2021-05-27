@@ -3,7 +3,8 @@
 require 'bundler/inline'
 
 gemfile(true) do
-  source 'https://nexus-gss.uscis.dhs.gov/nexus/repository/didit-gems-group/'
+  # source 'https://nexus-gss.uscis.dhs.gov/nexus/repository/didit-gems-group/'
+  source "https://rubygems.org"
 
   git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
