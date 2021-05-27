@@ -47,8 +47,6 @@ class TestApp < Rails::Application
   }
 end
 
-# This is here because active storage s3 does not support
-# client side encryption (required by USCIS IDS)
 require 'active_storage/service/s3_service'
 
 module ActiveStorage
