@@ -1,0 +1,93 @@
+# Configure your app to talk to a Postgres database.  Please contact the DID(it) team to find out which versions of Postgres
+# are supported on the platform; in general, the DID(it) platform picks a default version
+#
+# Make sure the pg gem is installed and added to your Gemfile:
+#   gem install pg
+#
+# As with config/secrets.yml, never store sensitive information, like your database password, in your source code.
+# If your source code is ever seen by anyone, they now have access to your database.
+#
+# Instead, provide the password as a unix environment variable when you boot
+# the app. Read http://guides.rubyonrails.org/configuring.html#configuring-a-database
+# for a full rundown on how to provide these environment variables in a
+# production deployment.
+#
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+
+  # The following have custom pool size is to accommodate the concurrency
+  # limit in our sidekiq configuration. We are allowing 10 concurrent
+  # processes in sidekiq so we give a little extra slack with 15
+  # allowed connections in our pools.
+  pool: 15
+  # Connect on a TCP socket. Omitted by default since the client uses a
+  # domain socket that doesn't need configuration. Windows does not have
+  # domain sockets, so uncomment these lines.
+
+  # host: localhost
+
+  # The specified database role being used to connect to postgres. To create additional roles in postgres
+  # see `$ createuser --help`.  When left blank, postgres will use the default role (which is the same name
+  # as the operating system user that created the database).  If the PGUSER environment variable is set,
+  # Postgres will use that instead.  If you need to override the default method or PGUSER method, you can specify
+  # a custom role here.
+  # username:
+
+  # The password associated with the postgres role (username).  Postgres will use the PGPASSWORD
+  # environment variable if one is set.  If you need to override that, you can do so here.
+  # password:
+
+  # The TCP port the server listens on. Defaults to 5432.
+  # If your server runs on a different port number, change accordingly.
+  # If you need to talk to a port other than the default version of Postgres running on port 5432
+  # you can use a strategy like the one below.  This is useful when the DID(it) platform is in a state
+  # of transition between versions of Postgres.
+  # port: <%= ENV['PG_94_PORT'] || '5432' %>
+  port: 5432
+
+  # UTF8, is the default collation, but UTF8 has international sorting rules which don't always make sense for English.  If you
+  # want to go back to UTF8, remove the collation, ctype and template lines.
+  collation: C
+  ctype: C
+
+  # The collation can't be set unless template0 is chosen.  The default template already specifies a collation and it can't be
+  # overridden. template0 doesn't have a collation set and it allows us to manually set the collation above.
+  template: template0
+
+  # Schema search path. The server defaults to $user,public
+  # schema_search_path: myapp,sharedapp,public
+
+  # Minimum log levels, in increasing order:
+  #   debug5, debug4, debug3, debug2, debug1,
+  #   log, notice, warning, error, fatal, and panic
+  # Defaults to warning.
+  # min_messages: notice
+
+development:
+  <<: *default
+  database: active_storage_development
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: active_storage_test<%= ENV['TEST_ENV_NUMBER'] %>
+preview:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+staging:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
